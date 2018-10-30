@@ -38,9 +38,29 @@ public class Demo {
        return true;
     }
 
+    public static boolean Find2(int target, int [][] array) {
+        for(int i = 0; i< array.length; i++){
+            int demo = 0;
+            int low = 0;
+            int high = array[i].length-1;
+
+            while(low<=high){
+                int mid = (low+high)/2;
+                if(target<array[i][mid]){
+                    high = mid-1;
+                }else if(target>array[i][mid]){
+                    low = mid+1;
+                }else {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
     public static void main(String[] args) {
        int [][]array = {{1,2,8,9},{2,4,9,12},{4,7,10,13},{6,8,11,15}};
        int demo = 7;
-        System.out.println(Demo.Find(demo,array));
+        System.out.println(Demo.Find2(demo,array));
     }
 }
