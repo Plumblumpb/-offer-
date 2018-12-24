@@ -1,4 +1,4 @@
-package A20栈的压入弹出序列;
+package 剑指.A20栈的压入弹出序列;
 
 /**
  * @Auther: cpb

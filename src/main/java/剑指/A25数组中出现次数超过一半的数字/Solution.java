@@ -1,8 +1,6 @@
-package A25数组中出现次数超过一半的数字;
+package 剑指.A25数组中出现次数超过一半的数字;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 
 /**
  * @Auther: cpb
