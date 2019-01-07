@@ -11,18 +11,22 @@ public class 希尔排序 {
         int  gap = len / 2;
         while (gap > 0) {
             for (int i = gap; i < len; i++) {
+                //保存当前节点
                 int temp = array[i];
+                //保存最右边的序号
                 int preIndex = i - gap;
                 while (preIndex >= 0 && array[preIndex] > temp) {
                     array[preIndex + gap] = array[preIndex];
                     preIndex -= gap;
                 }
+                //保存最左边的数
                 array[preIndex + gap] = temp;
             }
             gap /= 2;
         }
         return array;
     }
+
 
     public static void main(String[] args) {
         int a[] = new int[]{9,8,3,7,6,5,4,3,2,1};

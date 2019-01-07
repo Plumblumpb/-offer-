@@ -38,21 +38,6 @@ public class 归并排序 {
         return result;
     }
 
-//    public int[] sort(int[]a){
-//        int len = a.length;
-//        int mid = len/2;
-//        int []left = Arrays.copyOfRange(a,0,mid);
-//        int []right = Arrays.copyOfRange(a,mid,len);
-//        return merge1(sort(left), sort(right));
-//    }
-//
-//    public int[] merge1(int []left,int[]right){
-//        int[] result = new int[left.length + right.length];
-//        for(int index = 0, i = 0, j = 0; index < result.length; index++){
-//            if()
-//        }
-//
-//    }
 
 
     public static void main(String[] args) {
