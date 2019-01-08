@@ -54,7 +54,7 @@ public class 快速排序 {
         array[j] = temp;
     }
     public static void main(String[] args) {
-        int a[] = new int[]{9,8,3,7,6,5,4,3,2,1};
+        int a[] = new int[]{1,8,3,7,6,5,4,3,2,9};
         快速排序.quickSort(a,0,a.length-1);
         for(int i = 0 ;i<a.length;i++){
             System.out.println(a[i]);

@@ -1,4 +1,4 @@
-package 设计模式.单例模式;
+package 设计模式.A1单例模式;
 
 /**
  * @Auther: cpb
