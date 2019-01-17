@@ -1,4 +1,4 @@
-package 回调函数;
+package 回调函数.代理模式;
 
 /**
  * @Auther: cpb
@@ -18,13 +18,9 @@ public class Tools {
     }
 
     public   static   void  main(String[] args) {
-        Tools tool = new  Tools();
-        tool.testTime(new  CallBack(){
-            //定义execute方法
-            public   void  execute(){
-                //这里可以加放一个或多个要测试运行时间的方法
-                RunningTime.testMethod();
-            }
-        });
+        Tools tool = new Tools();
+        //让代理去实现方法去调用方法
+        Proxy proxy = new Proxy(new MyCallBack());
+        tool.testTime(proxy);
     }
 }
