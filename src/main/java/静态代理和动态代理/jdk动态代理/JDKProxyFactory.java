@@ -28,7 +28,7 @@ public class JDKProxyFactory implements InvocationHandler {
         return newProxyInstance;
     }
 
-    @Override
+
     // 第一个参数:代理对象.一般不使用;第二个参数:需要增强的方法;第三个参数:方法中的参数
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
         System.out.println("这是增强方法前......");

@@ -36,10 +36,8 @@ public class CglibProxyFactory implements MethodInterceptor {
 
     //参数一:代理对象;参数二:需要增强的方法;参数三:需要增强方法的参数;参数四:需要增强的方法的代理
     public Object intercept(Object proxy, Method method, Object[] args, MethodProxy methodProxy) throws Throwable {
-        // 增强前
         System.out.println("这是增强方法前......");
         Object invoke = methodProxy.invoke(target, args);
-        // 增强后
         System.out.println("这是增强方法后......");
         return invoke;
     }
