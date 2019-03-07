@@ -1,4 +1,4 @@
-package 集合类.arraylist;
+package 集合类.Arraylist;
 
 import java.util.ArrayList;
 import java.util.Arrays;
