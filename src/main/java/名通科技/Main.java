@@ -1,5 +1,6 @@
 package 名通科技;
 
+
 /**
  * Created with IDEA
  * author:plumblum
@@ -7,8 +8,8 @@ package 名通科技;
  * Time:9:25
  */
 public class Main {
-    public static void main(String[] args) {
 
+    public static void main(String[] args) {
 
     }
 }
