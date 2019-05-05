@@ -1,6 +1,9 @@
 package 树查询优化;
 
+import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * @Auther: cpb
@@ -15,9 +18,49 @@ public class TreeNode {
 
         private String name;
 
-        private List<TreeNode> children;
+        private LinkedHashSet<TreeNode> children = new LinkedHashSet<>();
 
-        public TreeNode(String id, String name, String parentId) {
+        private int level;
+
+        private String path;
+
+        private boolean isLeaf;
+
+        private int sort;
+
+    public int getSort() {
+        return sort;
+    }
+
+    public void setSort(int sort) {
+        this.sort = sort;
+    }
+
+    public boolean isLeaf() {
+        return isLeaf;
+    }
+
+    public void setLeaf(boolean leaf) {
+        isLeaf = leaf;
+    }
+
+    public int getLevel() {
+        return level;
+    }
+
+    public void setLevel(int level) {
+        this.level = level;
+    }
+
+    public String getPath() {
+        return path;
+    }
+
+    public void setPath(String path) {
+        this.path = path;
+    }
+
+    public TreeNode(String id, String name, String parentId) {
             this.id = id;
             this.parentId = parentId;
             this.name = name;
@@ -53,11 +96,11 @@ public class TreeNode {
             this.id = id;
         }
 
-        public List<TreeNode> getChildren() {
+        public LinkedHashSet<TreeNode> getChildren() {
             return children;
         }
 
-        public void setChildren(List<TreeNode> children) {
+        public void setChildren(LinkedHashSet<TreeNode> children) {
             this.children = children;
         }
 

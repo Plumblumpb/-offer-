@@ -15,19 +15,18 @@ public class Main {
      * @return
      */
     public static List<TreeNode> bulid(List<TreeNode> treeNodes) {
-
         List<TreeNode> trees = new ArrayList<TreeNode>();
-
         for (TreeNode treeNode : treeNodes) {
-
             if ("0".equals(treeNode.getParentId())) {
                 trees.add(treeNode);
             }
-
             for (TreeNode it : treeNodes) {
+                if(it.getId()==treeNode.getId()){
+                    continue;
+                }
                 if (it.getParentId() == treeNode.getId()) {
                     if (treeNode.getChildren() == null) {
-                        treeNode.setChildren(new ArrayList<TreeNode>());
+                        treeNode.setChildren(new LinkedHashSet<TreeNode>());
                     }
                     treeNode.getChildren().add(it);
                 }
@@ -60,7 +59,7 @@ public class Main {
         for (TreeNode it : treeNodes) {
             if(treeNode.getId().equals(it.getParentId())) {
                 if (treeNode.getChildren() == null) {
-                    treeNode.setChildren(new ArrayList<TreeNode>());
+                    treeNode.setChildren(new LinkedHashSet<>());
                 }
                 treeNode.getChildren().add(findChildren(it,treeNodes));
             }
@@ -94,54 +93,234 @@ public class Main {
         list.add(treeNode10);
         List<TreeNode> trees = Main.bulid(list);
         List<TreeNode> trees_ = Main.buildByRecursive(list);
+        List<Tree> treeBFSRecursion =  Main.BFSRecursion(trees);
+        List<Tree> treeDFSRecursion = Main.DFSRecursion(trees);
+//        List<Tree> treeBFS = Main.BFS(trees);
+//        List<Tree> treeDFS = Main.DFS(trees);
+        System.out.println(treeBFSRecursion);
+        System.out.println(treeDFSRecursion);
     }
 
-    public List<Tree> BFS(List<TreeNode> list){
-        if(list ==null){
-            return null;
-        }
-        for(TreeNode node :list){
-            Queue<TreeNode> queue=new LinkedList<TreeNode>();
-            queue.offer(node);
-            while(!queue.isEmpty()){
-                TreeNode tree = queue.poll();
+//    public static List<TreeNode> BFS(List<TreeNode> list){
+//
+//    }
 
+    public static List<Tree> BFSRecursion(List<TreeNode> list){
+        List<Tree> trees = new ArrayList<>();
+        for(TreeNode node:list){
+            Tree  tree = new Tree();
+            tree.setId(node.getId());
+            tree.setName(node.getName());
+            String path = "/"+node.getId();
+            tree.setPath(path);
+            tree.setParentId("1");
+            tree.setSort(1);
+            tree.setLeaf(false);
+            tree.setLevel(1);
+            trees.add(tree);
+            Set<TreeNode> treeNodes = node.getChildren();
+            BFSRecursionBFS(trees,treeNodes,path,tree.getLevel()+1);
+        }
+        return trees;
+    }
+
+    public static List<Tree> BFSRecursionBFS(List<Tree> trees,Set<TreeNode> list,String path,int level){
+        int i = 1;
+        for(TreeNode node:list){
+            Tree  tree = new Tree();
+            tree.setId(node.getId());
+            tree.setName(node.getName());
+            String path1 = path+"/"+node.getId();
+            tree.setPath(path1);
+            tree.setParentId(node.getParentId());
+            tree.setLevel(level);
+            tree.setSort(i++);
+            trees.add(tree);
+            Set<TreeNode> treeNodes = node.getChildren();
+            BFSRecursionBFS(trees, treeNodes, path1,level);
+        }
+        return trees;
+    }
+
+
+
+    /**
+     *
+     * @param list
+     * @return
+     */
+    public static List<Tree> DFSRecursion(List<TreeNode> list){
+        List<Tree> trees = new ArrayList<>();
+        for(TreeNode node:list){
+            Tree  tree = new Tree();
+            tree.setId(node.getId());
+            tree.setName(node.getName());
+            String path = "/"+node.getId();
+            tree.setPath(path);
+            tree.setParentId("1");
+            DFSRecursionDFS(trees,node,path);
+            trees.add(tree);
+        }
+        return trees;
+    }
+
+    public static List<Tree>  DFSRecursionDFS(List<Tree> trees,TreeNode node,String path){
+        Set<TreeNode> treeNodes = node.getChildren();
+        for(TreeNode node1:treeNodes){
+            Tree  tree = new Tree();
+            tree.setId(node1.getId());
+            tree.setName(node1.getName());
+            tree.setParentId(node.getId());
+            String path1 = path+"/"+node1.getId();
+            tree.setPath(path1);
+            DFSRecursionDFS(trees,node1,path1);
+            trees.add(tree);
+        }
+        return trees;
+    }
+
+    /**
+     * stack深度遍历
+     * 缺点无法设置sort，
+     * @param list
+     * @return
+     */
+    public static List<Tree> DFS(List<TreeNode> list){
+        List<Tree> trees = new ArrayList<>();
+        for(TreeNode node:list) {
+            trees.addAll(DFSList(node));
+        }
+        return trees;
+    }
+
+
+
+    public static List<Tree> DFSList(TreeNode node){
+        List<Tree> trees = new ArrayList<>();
+        LinkedList result = new LinkedList();
+        result.add(node);
+        Map<Integer,Integer> sort = new HashMap<>();
+        while(!result.isEmpty()){
+            TreeNode node1 = (TreeNode) result.pollLast();
+            Tree tree1 = new Tree();
+            if(trees.isEmpty()){
+                node1.setPath("/"+node1.getId());
+                node1.setLevel(1);
+                node1.setParentId("");
+                tree1.setPath(node1.getPath());
+                tree1.setParentId(node1.getParentId());
+                tree1.setName(node1.getName());
+                tree1.setLeaf(false);
+                tree1.setId(node1.getId());
+                tree1.setLevel(node1.getLevel());
+                tree1.setSort(1);
+                trees.add(tree1);
+                //设置sort
+                sort.put(tree1.getLevel(),1);
+            }else{
+                tree1.setPath(node1.getPath());
+                tree1.setParentId(node1.getParentId());
+                tree1.setName(node1.getName());
+                tree1.setLeaf(node1.isLeaf());
+                tree1.setId(node1.getId());
+                tree1.setLevel(node1.getLevel());
+                tree1.setSort(node1.getSort());
+                trees.add(tree1);
+            }
+
+
+            LinkedHashSet<TreeNode> set = node1.getChildren();
+            if(set.size()>0){
+                for (int i = set.size()-1; i >=0; i--) {
+                    TreeNode treeNode = (TreeNode) set.toArray()[i];
+                    treeNode.setParentId(node1.getId());
+                    treeNode.setPath(node1.getPath()+"/"+treeNode.getId());
+                    treeNode.setLevel(node1.getLevel()+1);
+                    if(treeNode.getChildren().isEmpty()){
+                        treeNode.setLeaf(true);
+                    }
+                    if (sort.containsKey(treeNode.getLevel())){
+                        sort.put(treeNode.getLevel(),sort.get(treeNode.getLevel())+1);
+                    }else {
+                        sort.put(treeNode.getLevel(),1);
+                    }
+                    treeNode.setSort(sort.get(treeNode.getLevel()));
+                    result.add(treeNode);
             }
         }
+        }
+        return trees;
     }
 
-//    public ArrayList<Integer> PrintFromTopToBottom(TreeNode root) {
-//        ArrayList<Integer> lists=new ArrayList<Integer>();
-//        if(root==null)
-//            return lists;
-//        Queue<TreeNode> queue=new LinkedList<TreeNode>();
-//        queue.offer(root);
-//        while(!queue.isEmpty()){
-//            TreeNode tree=queue.poll();
-//            if(tree.left!=null)
-//                queue.offer(tree.left);
-//            if(tree.right!=null)
-//                queue.offer(tree.right);
-//            lists.add(tree.val);
-//        }
-//        return lists;
-//    }
-//    public ArrayList<Integer> PrintFromTopToBottom(TreeNode root) {
-//        ArrayList<Integer> lists=new ArrayList<Integer>();
-//        if(root==null)
-//            return lists;
-//        Stack<TreeNode> stack=new Stack<TreeNode>();
-//        stack.push(root);
-//        while(!stack.isEmpty()){
-//            TreeNode tree=stack.pop();
-//　　　　　　//先往栈中压入右节点，再压左节点，这样出栈就是先左节点后右节点了。
-//            if(tree.right!=null)
-//                stack.push(tree.right);
-//            if(tree.left!=null)
-//                stack.push(tree.left);
-//            lists.add(tree.val);
-//        }
-//        return lists;
-//    }
 
+    public static List<Tree> BFS(List<TreeNode> list){
+        List<Tree> trees = new ArrayList<>();
+        for(TreeNode node:list) {
+            trees.addAll(BFSList(node));
+        }
+        return trees;
+    }
+    /**
+     * queue实现广度遍历
+     * @param node
+     * @return
+     */
+    public static  List<Tree> BFSList(TreeNode node){
+        List<Tree> trees = new ArrayList<>();
+        LinkedList result = new LinkedList();
+        result.add(node);
+        Map<Integer,Integer> sort = new HashMap<>();
+        while(!result.isEmpty()){
+            TreeNode node1 = (TreeNode) result.poll();
+            Tree tree1 = new Tree();
+            if(trees.isEmpty()){
+                node1.setPath("/"+node1.getId());
+                node1.setLevel(1);
+                node1.setParentId("");
+                tree1.setPath(node1.getPath());
+                tree1.setParentId(node1.getParentId());
+                tree1.setName(node1.getName());
+                tree1.setLeaf(false);
+                tree1.setId(node1.getId());
+                tree1.setLevel(node1.getLevel());
+                tree1.setSort(1);
+                trees.add(tree1);
+                //设置sort
+                sort.put(tree1.getLevel(),1);
+            }else{
+                tree1.setPath(node1.getPath());
+                tree1.setParentId(node1.getParentId());
+                tree1.setName(node1.getName());
+                tree1.setLeaf(node1.isLeaf());
+                tree1.setId(node1.getId());
+                tree1.setLevel(node1.getLevel());
+                tree1.setSort(node1.getSort());
+                trees.add(tree1);
+
+            }
+
+
+            LinkedHashSet<TreeNode> set = node1.getChildren();
+            if(set.size()>0){
+                for (int i = 0; i < set.size(); i++) {
+                    TreeNode treeNode = (TreeNode) set.toArray()[i];
+                    treeNode.setParentId(node1.getId());
+                    treeNode.setPath(node1.getPath()+"/"+treeNode.getId());
+                    treeNode.setLevel(node1.getLevel()+1);
+                    if(treeNode.getChildren().isEmpty()){
+                        treeNode.setLeaf(true);
+                    }
+                    if (sort.containsKey(treeNode.getLevel())){
+                        sort.put(treeNode.getLevel(),sort.get(treeNode.getLevel())+1);
+                    }else {
+                        sort.put(treeNode.getLevel(),1);
+                    }
+                    treeNode.setSort(sort.get(treeNode.getLevel()));
+                    result.add(treeNode);
+            }
+            }
+        }
+        return trees;
+
+    }
 }

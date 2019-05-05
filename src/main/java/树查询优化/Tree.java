@@ -14,6 +14,36 @@ public class Tree {
 
     private String path;
 
+    private int level;
+
+    private Boolean isLeaf;
+
+    private int sort;
+
+    public int getSort() {
+        return sort;
+    }
+
+    public void setSort(int sort) {
+        this.sort = sort;
+    }
+
+    public int getLevel() {
+        return level;
+    }
+
+    public void setLevel(int level) {
+        this.level = level;
+    }
+
+    public Boolean getLeaf() {
+        return isLeaf;
+    }
+
+    public void setLeaf(Boolean leaf) {
+        isLeaf = leaf;
+    }
+
     public String getId() {
         return id;
     }
