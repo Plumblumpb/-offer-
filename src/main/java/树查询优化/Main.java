@@ -1,7 +1,12 @@
 package 树查询优化;
 
 
+import org.apache.commons.lang3.StringUtils;
+
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * @Auther: cpb
@@ -67,6 +72,45 @@ public class Main {
         return treeNode;
     }
 
+    public static List treeCategoryGeneralEX(List<?> list, Class clz) {
+
+        if (list.isEmpty()) {
+            return new ArrayList<>();
+        }
+        List result = new ArrayList();
+        try {
+            Method getParentID = clz.getDeclaredMethod("getParentId");
+            Method getChildren = clz.getDeclaredMethod("getChildren");
+            Method getId = clz.getDeclaredMethod("getId");
+            Method setChildren = clz.getDeclaredMethod("setChildren", LinkedHashSet.class);
+            for(Object vo1:list){
+                if(getChildren.invoke(vo1) == null){
+                    setChildren.invoke(vo1,new LinkedHashSet<>());
+                }
+                if (getParentID.invoke(vo1).toString().equals("0")) {
+                    result.add(vo1);
+                }
+                for (Object vo2 : list) {
+                    if (!getParentID.invoke(vo2).toString().equals("0") && getParentID.invoke(vo2).equals(getId.invoke(vo1))) {
+                        if(getChildren.invoke(vo1) == null){
+                            setChildren.invoke(vo1,new LinkedHashSet<>());
+                        }
+                        ((LinkedHashSet)getChildren.invoke(vo1)).add(vo2);
+                    }
+                }
+            }
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+        }
+
+        return result;
+
+    }
+
 
 
     public static void main(String[] args) {
@@ -91,14 +135,30 @@ public class Main {
         list.add(treeNode8);
         list.add(treeNode9);
         list.add(treeNode10);
-        List<TreeNode> trees = Main.bulid(list);
-        List<TreeNode> trees_ = Main.buildByRecursive(list);
-        List<Tree> treeBFSRecursion =  Main.BFSRecursion(trees);
-        List<Tree> treeDFSRecursion = Main.DFSRecursion(trees);
+
+        Map<String, TreeNode> map = list.stream().collect(Collectors.toMap(s -> s.getId(), s -> s));
+        List<TreeNode> resultTree = new ArrayList<>();
+        list.stream().forEach(
+                p -> {
+                    TreeNode treeNode = map.get(p.getParentId());
+                    if (treeNode == null) {
+                        resultTree.add(p);
+                    } else {
+                        treeNode.getChildren().add(p);
+                    }
+                }
+
+
+        );
+        System.out.println(resultTree);
+//        List<TreeNode> trees = Main.bulid(list);
+//        List<TreeNode> trees_ = Main.buildByRecursive(list);
+//        List<Tree> treeBFSRecursion =  Main.BFSRecursion(trees);
+//        List<Tree> treeDFSRecursion = Main.DFSRecursion(trees);
 //        List<Tree> treeBFS = Main.BFS(trees);
 //        List<Tree> treeDFS = Main.DFS(trees);
-        System.out.println(treeBFSRecursion);
-        System.out.println(treeDFSRecursion);
+//        System.out.println(treeBFSRecursion);
+//        System.out.println(treeDFSRecursion);
     }
 
 //    public static List<TreeNode> BFS(List<TreeNode> list){
