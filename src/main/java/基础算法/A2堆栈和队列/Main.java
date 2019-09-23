@@ -81,15 +81,15 @@ public class Main {
     }
     public static void main(String[] args) {
         PriorityQueue queue = new PriorityQueue();
-        PriorityQueue<Integer> pq = new PriorityQueue<>(new Comparator<Integer>() {
-            @Override
-            public int compare(Integer o1, Integer o2) {
-                return o2-o1;
-            }
-        });
+//        PriorityQueue<Integer> pq = new PriorityQueue<>(new Comparator<Integer>() {
+//            @Override
+//            public int compare(Integer o1, Integer o2) {
+//                return o2-o1;
+//            }
+//        });
         queue.add(1);
         queue.add(3);
-
+        queue.add(2);
         System.out.println(queue.peek());
         System.out.println(queue.poll());
         System.out.println(queue.peek());
